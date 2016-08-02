@@ -3,17 +3,17 @@ extends ../layout
 block content
 	.container
 		.row
-			form.form-horizontal(method="post",action="/movie/save")
+			form.form-horizontal(method="post",action="/movie/save",enctype="multipart/form-data")
 				if movie._id
 					input(type="hidden",name="movie[_id]",value=movie._id)
 				.form-group
 					label.col-sm-2.control-label(for="douban") 豆瓣API
 					.col-sm-10
 						input#douban.form-control(type="text")
-				.form-group
-					label.col-sm-2.control-label(for="inputCategory") 电影分类
-					.col-sm-10
-						input#inputCategory.form-control(type="text",name="movie[categoryName]",value=movie.categoryName)
+				//- .form-group
+				//- 	label.col-sm-2.control-label(for="inputCategory") 电影分类
+				//- 	.col-sm-10
+				//- 		input#inputCategory.form-control(type="text",name="movie[categoryName]",value=movie.categoryName)
 				if categories && categories.length > 0
 					.form-group
 						label.col-sm-2.control-label 分类选择
@@ -46,6 +46,10 @@ block content
 					label.col-sm-2.control-label(for="inputPoster") 海报地址
 					.col-sm-10
 						input#inputPoster.form-control(type="text",name="movie[poster]",value=movie.poster)
+				.form-group
+					label.col-sm-2.control-label(for="uploadPoster") 海报上传
+					.col-sm-10
+						input#uploadPoster(type="file",name="uploadPoster")
 				.form-group
 					label.col-sm-2.control-label(for="inputFlash") 片源地址
 					.col-sm-10

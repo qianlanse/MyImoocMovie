@@ -15,6 +15,7 @@ app.set('views','./app/views/pages');
 app.set('view engine','jade');
 app.use(bodyParser.urlencoded({extended: true}));//格式化POST数据
 app.use(serveStatic('public'));//静态文件
+app.use(require('connect-multiparty')());		//上传文件
 app.locals.moment = require('moment');
 app.use(cookieParser());
 app.use(session({
