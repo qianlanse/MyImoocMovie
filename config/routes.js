@@ -13,11 +13,11 @@ module.exports = function(app){
 	app.get('/',Index.index)
 
 	//User
-	app.post('/user/signup',User.sendSignup);			//注册页
-	app.post('/user/signin',User.sendSignin);			//登录页
+	app.post('/user/signup',User.sendSignup);												//注册页
+	app.post('/user/signin',User.sendSignin);												//登录页
 	app.get('/signup',User.signup);					
 	app.get('/signin',User.signin);					
-	app.get('/user/list',User.signinRequired,User.adminRequired,User.list);
+	app.get('/user/list',User.signinRequired,User.adminRequired,User.list);					//用户列表
 	app.get('/user/logout',User.logout);
 
 	//Movie
@@ -26,5 +26,5 @@ module.exports = function(app){
 	app.get('/movie/list',User.signinRequired,User.adminRequired,Movie.list)				//列表页
 	app.post('/movie/save',User.signinRequired,User.adminRequired,Movie.save);				//保存页
 	app.delete('/movie/del',User.signinRequired,User.adminRequired,Movie.del);				//删除页
-	app.get('/movie/:id',Movie.detail);				//详情页
+	app.get('/movie/:id',Movie.detail);														//详情页
 }
