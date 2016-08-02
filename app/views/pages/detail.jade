@@ -10,26 +10,29 @@ block content
 						h3 评论区
 					.panel-body
 						ul.media-list
-							each item in comments
-								li.media
-									.pull-left
-										a.comment(href="#comments",data-cid="#{item._id}",data-tid="#{item.from._id}")
-											img.media-object(src="http://dummyimage.com/64x64/369/fff")
-									.media-body
-										h4.media-heading #{item.from.name}
-										p #{item.content}
-										if item.reply && item.reply.length > 0
-											each reply in item.reply
-												.media
-													.pull-left
-														a.comment(href="#comments",data-cid="#{item._id}",data-tid="#{reply.from._id}")
-															img.media-object(src="http://dummyimage.com/64x64/369/fff")
-													.media-body
-														h4.media-heading 
-															| #{reply.from.name}
-															span.text-info &nbsp;回复&nbsp;
-															| #{reply.to.name}:
-														p #{reply.content}
+							if comments.length > 0
+								each item in comments
+									li.media
+										.pull-left
+											a.comment(href="#comments",data-cid="#{item._id}",data-tid="#{item.from._id}")
+												img.media-object(src="http://dummyimage.com/64x64/369/fff")
+										.media-body
+											h4.media-heading #{item.from.name}
+											p #{item.content}
+											if item.reply && item.reply.length > 0
+												each reply in item.reply
+													.media
+														.pull-left
+															a.comment(href="#comments",data-cid="#{item._id}",data-tid="#{reply.from._id}")
+																img.media-object(src="http://dummyimage.com/64x64/369/fff")
+														.media-body
+															h4.media-heading 
+																| #{reply.from.name}
+																span.text-info &nbsp;回复&nbsp;
+																| #{reply.to.name}:
+															p #{reply.content}
+							else
+								li.media 暂无任何评论，赶快来评论吧:)
 				#comments
 					form#commentForm(method="POST",action="/comment/add",style="padding-bottom:80px;")
 						input(type="hidden",name="comment[movie]",value="#{movie._id}")

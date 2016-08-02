@@ -2,6 +2,7 @@ var Index = require('../app/controllers/index');
 var Movie = require('../app/controllers/movie');
 var User = require('../app/controllers/user');
 var Comment = require('../app/controllers/comment');
+var Category = require('../app/controllers/category');
 
 module.exports = function(app){
 	//pre handle user
@@ -31,4 +32,12 @@ module.exports = function(app){
 
 	//Comment
 	app.post('/comment/add',User.signinRequired,Comment.add);								//新增评论
+
+	//Category
+	app.get('/category/new',User.signinRequired,User.adminRequired,Category.new);			//新增分类
+	app.post('/category/add',User.signinRequired,User.adminRequired,Category.add);			//新增分类
+	app.get('/category/list',User.signinRequired,User.adminRequired,Category.list);			//分类列表
+
+	//results
+	app.get('/results',Index.search);														//搜索分类
 }

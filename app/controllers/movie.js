@@ -1,5 +1,6 @@
 var Movie = require('../models/movie');
 var Comment = require('../models/comment');
+var Category = require('../models/category');
 var _ = require('underscore');
 
 //detail page
@@ -23,18 +24,14 @@ exports.detail = function(req,res){
 
 //new page
 exports.new = function(req,res){
-	res.render('movie',{
-		title:'imooc 电影录入页',
-	    movie:{
-	      title:'',
-	      director:'',
-	      country:'',
-	      language:'',
-	      poster:'',
-	      flash:'',
-	      year:'',
-	      summary:''
-	    }
+	Category.find({},function(err,categories){
+		console.log(categories);
+		if(err) console.log(err);
+		res.render('movie',{
+			title:'imooc 电影录入页',
+			categories:categories,
+		    movie:{}
+		})
 	})
 }
 
@@ -43,10 +40,13 @@ exports.update = function(req,res){
 	var id = req.params.id;
 	if(id){
 		Movie.findById(id,function(err,movie){
-			if(err) console.log(err);
-			res.render('movie',{
-				title:'imooc 电影更新页',
-				movie:movie
+			Category.find({},function(err,categories){
+				if(err) console.log(err);
+				res.render('movie',{
+					title:'imooc 电影更新页',
+					movie:movie,
+					categories:categories
+				})
 			})
 		})
 	}
@@ -57,29 +57,44 @@ exports.save = function(req,res){
 	var id = req.body.movie._id;
 	var movieObj = req.body.movie;
 	var _movie;
-	if(id !== 'undefined'){
+	if(id){												//修改
 		Movie.findById(id,function(err,movie){
 			if(err) console.log(err);
 			_movie = _.extend(movie,movieObj);
+			Category.findById(movie.category,function(err,category){
+				console.log(category);
+			})
 			_movie.save(function(err,movie){
 				if(err) console.log(err);
 				res.redirect('/movie/'+movie._id)
 			})
 		})
-	}else{
-		_movie = new Movie({
-			director:movieObj.director,
-			title:movieObj.title,
-			language:movieObj.language,
-			country:movieObj.country,
-			summary:movieObj.summary,
-			flash:movieObj.flash,
-			poster:movieObj.poster,
-			year:movieObj.year
-		});
+	}else{												//新增
+		_movie = new Movie(movieObj);
+		var categoryId = movieObj.category;
+		var categoryName = movieObj.categoryName;
+
 		_movie.save(function(err,movie){
 			if(err) console.log(err);
-			res.redirect('/movie/'+movie._id)
+			if(categoryId){
+				Category.findById(categoryId,function(err,category){
+					category.movies.push(movie._id);
+					category.save(function(err,category){
+						res.redirect('/movie/'+movie._id)
+					})
+				})
+			}else if(categoryName){
+				var category = new Category({
+					name:categoryName,
+					movies:[movie._id]
+				})
+				category.save(function(err,category){
+					movie.category = category._id;
+					movie.save(function(err,movie){
+						res.redirect('/movie/'+movie._id)
+					})
+				})
+			}
 		})
 	}
 }
