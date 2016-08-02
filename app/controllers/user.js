@@ -31,7 +31,7 @@ exports.sendSignup = function(req,res){
 	})
 }
 
-//sendSignin
+//sendSignin 
 exports.sendSignin = function(req,res){
 	var _user = req.body.user;
 	var name = _user.name;

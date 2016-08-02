@@ -1,6 +1,7 @@
 var Index = require('../app/controllers/index');
 var Movie = require('../app/controllers/movie');
 var User = require('../app/controllers/user');
+var Comment = require('../app/controllers/comment');
 
 module.exports = function(app){
 	//pre handle user
@@ -13,10 +14,10 @@ module.exports = function(app){
 	app.get('/',Index.index)
 
 	//User
-	app.post('/user/signup',User.sendSignup);												//注册页
-	app.post('/user/signin',User.sendSignin);												//登录页
-	app.get('/signup',User.signup);					
-	app.get('/signin',User.signin);					
+	app.post('/user/signup',User.sendSignup);												//提交注册
+	app.post('/user/signin',User.sendSignin);												//提交登录
+	app.get('/signup',User.signup);															//注册页	
+	app.get('/signin',User.signin);															//登录页
 	app.get('/user/list',User.signinRequired,User.adminRequired,User.list);					//用户列表
 	app.get('/user/logout',User.logout);
 
@@ -27,4 +28,7 @@ module.exports = function(app){
 	app.post('/movie/save',User.signinRequired,User.adminRequired,Movie.save);				//保存页
 	app.delete('/movie/del',User.signinRequired,User.adminRequired,Movie.del);				//删除页
 	app.get('/movie/:id',Movie.detail);														//详情页
+
+	//Comment
+	app.post('/comment/add',User.signinRequired,Comment.add);								//新增评论
 }
