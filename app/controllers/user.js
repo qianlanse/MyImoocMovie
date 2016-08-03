@@ -22,8 +22,8 @@ exports.sendSignup = function(req,res){
 		if(user){
 			res.redirect('/signin');			//如果注册用户已存在跳转登陆页
 		}else{
-			var user = new User(_user);
-			user.save(function(err,user){
+			var userObj = new User(_user);
+			userObj.save(function(err,user){
 				if(err) console.log(err);
 				res.redirect('/user/list');
 			})

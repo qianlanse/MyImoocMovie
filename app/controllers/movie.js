@@ -132,8 +132,7 @@ exports.save = function(req,res){
 
 //list page
 exports.list = function(req,res){
-	Movie.find({}).populate('Category','name').exec(function(err,movies){
-		console.log(movies);
+	Movie.find({}).populate('category','name').exec(function(err,movies){
 		if(err) console.log(err);
 		res.render('list',{
 			title:'imooc 列表',

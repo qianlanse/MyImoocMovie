@@ -8,8 +8,26 @@ var mongoose = require('mongoose');
 var mongoStore = require('connect-mongodb');
 var port = process.env.PORT || 3000;
 var app = express();
+var fs = require('fs');
 var dbUrl = 'mongodb://localhost/imooc';
 mongoose.connect(dbUrl);
+
+// models loading
+var models_path = __dirname + '/app/models';
+var walk = function(path){
+	fs.readdirSync(path).forEach(function(file){
+		var newPath = path + '/' + file;
+		var stat = fs.statSync(newPath);
+		if(stat.isFile()){
+			if(/(.*)\.(js|coffee)/.test(file)){
+				require(newPath);
+			}
+		}else if(stat.isDirectory){
+			walk(newPath);
+		}
+	})
+}
+walk(models_path);
 
 app.set('views','./app/views/pages');
 app.set('view engine','jade');
